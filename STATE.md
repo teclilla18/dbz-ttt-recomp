@@ -23,6 +23,10 @@ Updated 2026-11-22. Phase 0 only; Phase 1 has not started.
   staged-content checks and rejection of forbidden files deleted from history.
   The installed hook also passed on the staged Phase 0 source/docs.
 - No PC/emulator/console boot, media playback, gameplay or online test performed.
+- [confirmed] OLED connection check: remote status, read-only FTP root listing,
+  three direct screen captures, HOME selection right and back verified visually.
+  Original selection restored; remote controller detached. Nothing launched or
+  installed. This tests the hardware connection, not the DBZ port.
 
 ## Accepted / released
 

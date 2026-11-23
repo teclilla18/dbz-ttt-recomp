@@ -1,5 +1,16 @@
 # History
 
+## 2026-11-22: OLED connection and controller check
+
+- User authorized connecting to and controlling the powered-on OLED.
+- Used the existing installed Switch Remote server through a local-only bridge;
+  its tools were configured but not exposed directly in this chat.
+- Remote status and FTP root listing passed. Direct screen captures confirmed
+  HOME selection moved one place right and returned to its original tile.
+- Released the remote controller with detachController. No app launched, no
+  console files changed, no build installed. This is a connection/control test,
+  not a DBZ gameplay test. Device details and captures remain ignored locally.
+
 ## 2026-11-22: Phase 0 recon and repository safeguards
 
 - Read project instructions/plan first, then reread the user's expanded research
