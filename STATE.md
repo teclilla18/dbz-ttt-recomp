@@ -1,6 +1,6 @@
 # Current state
 
-Updated 2026-11-22. The recompiled game runs on PC through its menus and into
+Updated 2026-11-23. The recompiled game runs on PC through its menus and into
 the first stage's story introduction. Destination: native Switch OLED and Switch 2.
 
 ## Where it stands (tested on PC, Windows, MSVC Release)
@@ -32,7 +32,10 @@ the first stage's story introduction. Destination: native Switch OLED and Switch
   shows HUD over a black field; world/characters are not visible. Cause unproven.
 - [confirmed] Free Battle uses overlay 5 for selection; its fight continues
   without a new overlay load on the tested route. See ge-addressing.md.
-- Not accepted by the user; nothing released. No Switch build yet.
+- Not accepted by the user; nothing released. No Switch build yet: held by the
+  owner until a 60 fps Switch build is predicted (docs/notes/plan.md).
+- Repository is public on GitHub as a work in progress (2026-11-23); full history
+  passed the game-data guard (197 file versions) before publishing.
 
 ## How it is built
 

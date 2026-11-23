@@ -1,5 +1,18 @@
 # History
 
+## 2026-11-23: vsocp, Switch gate, reuse rule, public repository (Claude Code)
+
+- Finished Codex's interrupted vsocp task: Free Battle combat now has finite world
+  matrices and valid screen coordinates; the arena stays drawn and the timer and
+  health bars change. Fighters remain invisible [confirmed]; unknown VFPU words at
+  0x089BB9D0.. still trap [likely cause, uncertain].
+- Owner decisions: hold the Switch build until a 60 fps Switch build is predicted;
+  every task starts by searching online and the owner's repos (AGENTS.md rule 5).
+  The owner's Sonic Riders renderer design is the plan for GPU drawing.
+- Copied the Riders agent setup locally (wrap-up, gated hw-test, log-reader, guard
+  hooks, *.keys read block). Made the repository public as a work in progress after
+  a full-history guard check.
+
 ## 2026-11-22: GE relative addresses and Free Battle progression
 
 - Confirmed that combat uses origin-relative vertices; the old runtime reads
