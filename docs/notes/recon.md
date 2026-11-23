@@ -83,8 +83,9 @@ mean the game has no overlays, compressed sound or movies.
 - [likely] These are game-managed overlays sharing one memory window. They have
   no standard module-name identifiers identified in this inspection. Do not call
   them ordinary system PRXs: standard PSP PRX type is `0xFFA0`, not `0xFFA8`.
-- [uncertain] Their entry convention, loader, lifetime, external-call binding and
-  whether every member is used. Prove these before choosing an overlay design.
+- [confirmed, 2b] Entry convention, loader, lifetime and use of every member are
+  now in [overlays.md](overlays.md). Earlier note: their entry convention, loader,
+  lifetime, external-call binding and whether every member is used were unknown.
   Key static-recompilation risk: the same guest address may identify different
   code after an overlay swap. Dispatch needs overlay identity as well as address.
 - System-module loading is also present in the import table. Which firmware

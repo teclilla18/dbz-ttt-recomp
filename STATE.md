@@ -1,10 +1,19 @@
 # Current state
 
-Updated 2026-11-22. Phase 0 complete; Phase 1 metadata checkpoint complete.
+Updated 2026-11-22. Phase 0 complete; Phase 1 tasks 1, 2a and 2b complete.
 Destination: native Switch OLED and Switch 2. PC is for development/checks.
 
-Task 2a reviewed and committed by Claude Code (9 tests and the staged guard
-rerun before commit). Next: the overlay-loader task below, plan first.
+## Latest checkpoint: overlay loading rules (task 2b)
+
+- [confirmed, static reading only] One loader (`0x08A572F4`) with one wrapper;
+  16-byte overlay header with start-up/clean-up lists; code at `0x08A81670`.
+- [confirmed] 11 scenes, each loads one overlay; all 11 archive ELFs used. The
+  scene manager unloads the old scene before loading the next. Only the overlay's
+  own memory size is written/zeroed; the rest of the window is left as it was.
+- [confirmed] Main calls ~150 addresses inside the window directly, so dispatch
+  must use (loaded overlay, address). Details: docs/notes/overlays.md.
+- Implemented: original tools/mips_scan.py; tested with 6 synthetic tests
+  (15 tests total pass). Not run in an emulator; no dispatch code yet.
 
 ## Implemented
 
@@ -61,12 +70,12 @@ rerun before commit). Next: the overlay-loader task below, plan first.
 
 ## Next small task
 
-Identify the game's actual overlay loader and call/entry convention. Do not
-invent entry points from zero header entries. Prove lifetime and memory-clearing
-rules before choosing dispatch integration. Work one tested commit at a time.
+Confirm one real overlay load in an emulator debugger (path string, scene order),
+then start plan step 3: CPU translation tests on our own small samples.
 
 ## Where to read
 
+- [Overlay loading rules](docs/notes/overlays.md)
 - [Main metadata and analyzer correction](docs/notes/metadata.md)
 - [Plan](docs/notes/plan.md)
 - [Prior tool evaluation](docs/notes/tool-evaluation.md)

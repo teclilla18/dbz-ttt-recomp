@@ -51,8 +51,12 @@ Started at the owner's request. Work one step at a time, test and commit each.
    our main ELF is ET_EXEC and the archive overlays use type `0xFFA8`.
    **Checkpoint 2a:** repeatable main metadata preparation verifies all 228
    imports, preserves loaded bytes and entry, and the corrected scan completes.
-   Overlay entries/lifetime are not proved yet. **Next small task:** trace actual
-   overlay load/call rules before implementing their dispatch integration.
+   **Checkpoint 2b:** [overlay rules](overlays.md) found by static reading: one
+   loader, a 16-byte overlay header (start-up/clean-up lists, code at +0x10),
+   one overlay per scene (11 scenes, all 11 files used), unload before load,
+   tail zero-fill only, and direct main calls into the window. Dispatch must use
+   (loaded overlay, address). **Next small task:** confirm one real load in an
+   emulator debugger (path form, scene order), then start step 3.
 3. **Test CPU translation on our own small samples.** Cover branches and delay
    slots, indirect calls, PSP calling conventions, integer/FPU edge cases, and
    VFPU prefixes/register aliasing. Compare with independent reference results.

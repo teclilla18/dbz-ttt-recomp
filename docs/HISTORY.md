@@ -1,5 +1,13 @@
 # History
 
+## 2026-11-22: Phase 1 task 2b, overlay loading rules (Claude Code)
+
+- Added original tools/mips_scan.py (MIPS subset scanner) and 6 synthetic tests.
+- Found by static reading: the single overlay loader and its wrapper, the
+  16-byte overlay header, the scene manager and its 11 scenes, the file number
+  of each overlay, unload order and memory-clearing rules. Notes: overlays.md.
+- Not run in an emulator; no dispatch code yet.
+
 ## 2026-11-22: task 2a review and commit (Claude Code)
 
 - Reviewed the staged task 2a source and notes, reran the 9 metadata tests
