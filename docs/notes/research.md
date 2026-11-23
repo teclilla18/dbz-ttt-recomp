@@ -9,6 +9,12 @@ module-aware dispatch, independent CPU checks, small host interfaces and local
 own-copy setup. No external source was adopted during Phase 0. Tools described
 as promising are evaluation candidates, not proof that this game works.
 
+**Phase 1 follow-up:** [the pinned C11 tool was evaluated locally](tool-evaluation.md).
+It passed its own 27 tests and emitted C for all twelve inputs, but missed the
+stripped main metadata and exposed compilation, discovery and overlay-isolation
+gaps. Keep it as an external diagnostic candidate; production selection remains
+open. No upstream source was imported and no game code was executed.
+
 Evidence: [confirmed] means directly inspected local material or linked upstream
 source/documentation, as specified. Upstream playability claims were not tested
 by us. [likely] identifies an inference; [uncertain] identifies an open point.

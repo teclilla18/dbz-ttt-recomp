@@ -1,5 +1,26 @@
 # History
 
+## 2026-11-22: Phase 1 task 1, external PSP-to-C tool evaluation
+
+- User authorized Phase 1. Pinned sp00nznet/psprecomp at
+  `14749c1f9a94cecf55070d676ce80bc61cf49a5f` outside this repo, unmodified.
+  MSVC x64 Debug build succeeded; 27/27 upstream tests passed [confirmed].
+- Ran info/cover/funcs/emit on the main ELF and all 11 overlays: 48 zero-exit
+  command results. Emitted game C remains ignored under build/evaluation/.
+- Compiled 290/296 baseline C units to objects; six main units failed with
+  invalid float-literal suffixes. Overlay units all compiled individually;
+  no native program was linked or run [confirmed].
+- Found missing stripped metadata (zero imports), a zero-function overlay,
+  incomplete opcode emission and public-symbol collisions [confirmed].
+  A separate metadata-only copy preserved all loaded bytes and exposed all
+  228 imports to the existing parser; discovery on it timed out after 90 s.
+- Added original synthetic probes reproducing zero-entry omission, correct
+  fixed-entry discovery, malformed vector-immediate C and prefix collisions.
+  A synthetic compile independently reproduced the main C2059 error.
+- Decision: useful external diagnostic candidate, not production-ready unchanged.
+  Details and next task: docs/notes/tool-evaluation.md. No outside source/GPL
+  adoption, ISO changes, host game boot, console deployment or gameplay claim.
+
 ## 2026-11-22: OLED connection and controller check
 
 - User authorized connecting to and controlling the powered-on OLED.

@@ -1,13 +1,16 @@
 # DBZ Tenkaichi Tag Team recompilation research
 
-Phase 0 research for a native port of the PSP game. There is no playable port,
-recompiler or runtime here yet. Goal order: stable PC, Switch, Switch 2, then online.
+Work toward a native port of the PSP game for Nintendo Switch and Switch 2.
+PC runs are for development and checks. There is no playable port or adopted
+recompiler/runtime yet. Phase 0 is complete; the first Phase 1
+[tool evaluation](docs/notes/tool-evaluation.md) found useful components and gaps.
+Goal order: stable PC checks, Switch, Switch 2, then online.
 
 Read [AGENTS.md](AGENTS.md), [STATE.md](STATE.md), the
 [recon](docs/notes/recon.md) and [plan](docs/notes/plan.md).
 
 This repository must stay private until the owner decides otherwise. It contains
-only original project text and repository safeguards. No game files, generated
+only original project text, repository safeguards and synthetic tool probes. No game files, generated
 game code, saves, firmware or PSP decryption keys may be committed or uploaded.
 Each player will need their own game copy and local setup process.
 

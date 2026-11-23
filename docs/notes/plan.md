@@ -1,8 +1,10 @@
-# Plan (2026-11-22; Phase 0 recon, Phase 1 proposed)
+# Plan (2026-11-22; Phase 1 tool evaluation checkpoint)
 
-Scope: Phase 0 only this session. Findings are in [recon.md](recon.md), the full
+Phase 0 is complete. Findings are in [recon.md](recon.md), the full
 reuse survey in [research.md](research.md), and system NIDs in [imports.md](imports.md).
-Later phases remain proposals. Nothing has been recompiled or booted.
+Phase 1 task 1 is complete: [external tool evaluation](tool-evaluation.md).
+Local trial C was emitted and object compilation checked; nothing was booted.
+Production translator selection remains open. Later phases remain proposals.
 
 ## Phase 0: recon (first session, no code)
 
@@ -26,7 +28,7 @@ Later phases remain proposals. Nothing has been recompiled or booted.
 
 ## Phase 1: recompiler
 
-Do not start until the owner asks. Work one step at a time, test and commit each.
+Started at the owner's request. Work one step at a time, test and commit each.
 
 1. **Choose the base.** Evaluate the C-oriented PSP tools from the research survey
    on our executable and overlay formats. Study the existing same-game TTTRecomp
@@ -35,10 +37,16 @@ Do not start until the owner asks. Work one step at a time, test and commit each
    Prefer using an existing tool before writing its replacement. Keep tools with
    embedded decryption keys outside the repo. No GPL code adoption until the
    owner's GPL decision.
+   **Checkpoint:** pinned C11 candidate builds and passes 27 upstream tests, but
+   misses stripped metadata, stalls after diagnostic names are restored, emits
+   unsupported operations/invalid C and does not isolate overlay symbols. Keep
+   it external as a diagnostic candidate; do not accept it unchanged.
 2. **Prove the loading rules.** Check the fixed main ELF and find how the game
    swaps its 11 executable overlays at `0x08A81660`. Record entry points, memory
    clearing and binding rules. Ordinary relocatable PRXs are a separate case;
    our main ELF is ET_EXEC and the archive overlays use type `0xFFA8`.
+   **Next small task:** make metadata/entry discovery reliable, isolate the
+   named-copy analysis stall, and verify 228 imports before integrating overlays.
 3. **Test CPU translation on our own small samples.** Cover branches and delay
    slots, indirect calls, PSP calling conventions, integer/FPU edge cases, and
    VFPU prefixes/register aliasing. Compare with independent reference results.
