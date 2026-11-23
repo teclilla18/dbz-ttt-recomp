@@ -4,13 +4,14 @@ Work toward a native port of the PSP game for Nintendo Switch and Switch 2.
 PC runs are for development and checks. There is no playable port or adopted
 recompiler/runtime yet. Phase 0 is complete; the first Phase 1
 [tool evaluation](docs/notes/tool-evaluation.md) found useful components and gaps.
+The next checkpoint [recovers main metadata and fixes a scan overrun](docs/notes/metadata.md).
 Goal order: stable PC checks, Switch, Switch 2, then online.
 
 Read [AGENTS.md](AGENTS.md), [STATE.md](STATE.md), the
 [recon](docs/notes/recon.md) and [plan](docs/notes/plan.md).
 
 This repository must stay private until the owner decides otherwise. It contains
-only original project text, repository safeguards and synthetic tool probes. No game files, generated
+original project tools, notes, tests and a credited upstream correction. No game files, generated
 game code, saves, firmware or PSP decryption keys may be committed or uploaded.
 Each player will need their own game copy and local setup process.
 
@@ -44,8 +45,9 @@ must be installed in each new clone; they are not a server-side guarantee.
 
 Keep the game in ignored `baserom/`, generated output in ignored `build/`, and
 machine-specific notes in ignored `AI_HANDOFF.md` or `.local/`. External research
-tools stay outside this repository. No third-party source has been adopted and
-the project licence has not been chosen.
+tools stay outside this repository. The small analyzer correction preserves
+its [MIT notice](third_party/licenses/psprecomp.txt); no full external tool/runtime
+is vendored. The overall project licence has not been chosen.
 
 ## Research credits
 
@@ -53,6 +55,8 @@ Thanks to these projects and authors for public tools, documentation and ideas.
 This is research credit, not a claim that their code is included or that they
 endorse this project. [Research notes](docs/notes/research.md) record what we
 learned, licence boundaries, tested facts and limits for each source.
+One recorded source adaptation is the MIT-licensed sp00nznet analyzer boundary
+patch described above; its upstream notice is included.
 
 - Static recompilation: [N64Recomp](https://github.com/N64Recomp/N64Recomp),
   [Zelda64Recomp](https://github.com/Zelda64Recomp/Zelda64Recomp),

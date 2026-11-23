@@ -1,0 +1,8 @@
+--- a/tools/allegrexrecomp/analyze.c
++++ b/tools/allegrexrecomp/analyze.c
+@@ -40,3 +40,4 @@
+ int a_in_range(const a_analysis *an, uint32_t addr) {
+-    return addr >= an->base && addr < an->base + an->size && (addr & 3) == 0;
++    return an->size >= 4 && addr >= an->base && (addr & 3) == 0 &&
++           addr - an->base <= an->size - 4;
+ }

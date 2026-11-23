@@ -15,6 +15,14 @@ stripped main metadata and exposed compilation, discovery and overlay-isolation
 gaps. Keep it as an external diagnostic candidate; production selection remains
 open. No upstream source was imported and no game code was executed.
 
+**Metadata follow-up:** [task 2a](metadata.md) now preserves the main's loaded
+bytes while supplying stripped section names, verifies all 228 imports, and
+fixes the analyzer's incomplete-word range check. A small MIT-derived patch is
+recorded with the upstream notice; toolkit binaries/source trees remain external.
+Original synthetic probes plus a memory checker reproduce the baseline overrun
+and verify the correction. PSPSDK's module-info definition supplied layout facts;
+no PSPSDK source was copied. Production translator selection remains open.
+
 Evidence: [confirmed] means directly inspected local material or linked upstream
 source/documentation, as specified. Upstream playability claims were not tested
 by us. [likely] identifies an inference; [uncertain] identifies an open point.

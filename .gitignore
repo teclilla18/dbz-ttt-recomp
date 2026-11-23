@@ -27,6 +27,7 @@
 *.dll
 *.o
 *.obj
+*.pdb
 *.nro
 *.nso
 *.nsp

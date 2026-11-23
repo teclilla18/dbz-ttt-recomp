@@ -1,5 +1,37 @@
 # History
 
+## 2026-11-22: task 2a review and commit (Claude Code)
+
+- Reviewed the staged task 2a source and notes, reran the 9 metadata tests
+  and the staged game-data guard (0 problems), then committed the checkpoint.
+
+## 2026-11-22: shared-folder handoff refresh
+
+- Updated local, ignored AI_HANDOFF.md for Claude Code with the completed task
+  2a checkpoint, local evidence, verification commands and next task.
+- Released the stale ownership claim and recorded staged-but-uncommitted task
+  2a changes. Source implementation preserved; no commit or push in this session.
+
+## 2026-11-22: Phase 1 task 2a, main metadata and analyzer boundary
+
+- Added a narrow, hash-checked preparation tool for the European main ELF. It
+  writes a new ignored analysis copy, supplies three stripped section names and
+  verifies entry/program headers/loaded bytes remain unchanged [confirmed].
+- Recovered all 228 imports / 25 libraries; every identifier matches the separate
+  Phase 0 inventory. Nine original synthetic metadata tests pass [confirmed].
+- Isolated the scan stall: incomplete final instruction accepted by range check,
+  causing a heap bookkeeping overrun. Original five-byte sample and baseline
+  analyzer on named main both fail under AddressSanitizer [confirmed].
+- Recorded a small MIT analyzer patch with its upstream notice; used a separate
+  external worktree. Corrected synthetic probe passes 40 boundary checks, and
+  analyzer on named main completes without reported sanitizer errors. Existing
+  upstream Debug tests pass 27/27 [confirmed].
+- Corrected CLI scan completes in 0.165 s here; 19,445 heuristic candidates,
+  154 discovered import-thunk targets vs 228 declared imports. Counts do not prove
+  code coverage or guest correctness. All 12 input ELF hashes remain unchanged.
+- Next: prove overlay loading/call rules. No full translator/runtime adopted,
+  guest execution, console deployment, playable acceptance or release.
+
 ## 2026-11-22: Phase 1 task 1, external PSP-to-C tool evaluation
 
 - User authorized Phase 1. Pinned sp00nznet/psprecomp at

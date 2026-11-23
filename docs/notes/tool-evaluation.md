@@ -6,6 +6,10 @@ C from our files, but direct tests expose missing metadata handling, incomplete
 discovery/translation and code that does not compile. No game code was executed.
 No runtime, foreign source or decryption keys were adopted into this repository.
 
+Follow-up: [task 2a](metadata.md) adds repeatable section-name preparation and a
+credited MIT boundary correction. It resolves the main metadata/scan-stall gap;
+the baseline findings below remain the record of the unmodified tool evaluation.
+
 ## Tool and scope
 
 - [confirmed] Evaluated [sp00nznet/psprecomp](https://github.com/sp00nznet/psprecomp)
