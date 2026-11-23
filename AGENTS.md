@@ -17,7 +17,8 @@ rules, the Switch platform layer and the online lockstep ideas, not the CPU or g
    modules, decrypted executables, extracted assets, disassembly, recompiled output (`build/`), saves, or any
    PSP decryption keys. Small facts (addresses, function names, NIDs) are fine; blocks of code are not. Add a guard
    script (like Riders' tools/check_no_game_data.py) and a pre-commit hook before the first real commit.
-2. The GitHub repo stays **private** until the user decides otherwise.
+2. The GitHub repo is **public** as a work in progress (user's decision, 2026-11-23). Everything pushed is world-readable:
+   rules 1 and 4 apply to every commit and its message. Push only when the user asks.
 3. Never modify the user's original game file. Work on a copy in `baserom/` (gitignored).
 4. No personal details in tracked files (home paths, drive letters, emails): write `<home>`, `<repo>`, `<sd>`.
 5. **Learn from others first (the user's wish, repeated 2026-11-23).** Every task, for Claude Code and Codex alike:

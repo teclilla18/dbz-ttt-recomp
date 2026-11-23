@@ -1,4 +1,6 @@
-# DBZ Tenkaichi Tag Team recompilation research
+# DBZ Tenkaichi Tag Team recompilation (work in progress)
+
+> **Work in progress, not playable yet.** No downloads or builds are offered. Bring your own game.
 
 Work toward a native port of the PSP game for Nintendo Switch and Switch 2.
 PC runs are for development and checks. The recompiled game boots on PC to its
@@ -11,8 +13,8 @@ Goal order: stable PC checks, Switch, Switch 2, then online.
 Read [AGENTS.md](AGENTS.md), [STATE.md](STATE.md), the
 [recon](docs/notes/recon.md) and [plan](docs/notes/plan.md).
 
-This repository must stay private until the owner decides otherwise. It contains
-original project tools, notes, tests and a credited upstream correction. No game files, generated
+This repository is public as a work in progress (owner's decision, 2026-11-23). It contains
+original project tools, notes, tests and a credited, extended copy of the MIT toolkit named above. No game files, generated
 game code, saves, firmware or PSP decryption keys may be committed or uploaded.
 Each player will need their own game copy and local setup process.
 
