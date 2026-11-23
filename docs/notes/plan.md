@@ -1,4 +1,10 @@
-# Plan (2026-11-22; Phase 1 metadata checkpoint)
+# Plan (2026-11-22)
+
+Current checkpoint: PC menus and the first-stage story introduction run.
+The stage loading stall was corrected in the emitter; see
+[diagnosis and tests](battle-load.md). Next: advance the story to a playable
+battle and test it through completion. Switch and online work remain later.
+The phase-by-phase checkpoints below also record earlier investigation.
 
 Phase 0 is complete. Findings are in [recon.md](recon.md), the full
 reuse survey in [research.md](research.md), and system NIDs in [imports.md](imports.md).

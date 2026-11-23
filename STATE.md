@@ -1,7 +1,7 @@
 # Current state
 
-Updated 2026-11-22. Phase 1 complete enough to boot: the recompiled game runs
-on PC through its menus. Destination: native Switch OLED and Switch 2.
+Updated 2026-11-22. The recompiled game runs on PC through its menus and into
+the first stage's story introduction. Destination: native Switch OLED and Switch 2.
 
 ## Where it stands (tested on PC, Windows, MSVC Release)
 
@@ -10,15 +10,22 @@ on PC through its menus. Destination: native Switch OLED and Switch 2.
   Main Menu with its 3D models. Checked by scripted runs and screenshots.
 - [confirmed] Overlay swaps work live: 1 -> 3 -> 11 -> 4, matching overlays.md.
 - [confirmed] A save file is written under build/fs/ms/PSP/SAVEDATA/.
-- [confirmed] Choosing a Dragon Walker stage loads overlay 4, then the game
-  stops making frames (silent hang). This is the next blocker.
+- [confirmed] The first-stage loading stall is fixed: the same fresh-save
+  route now reaches story pages, advances scripted dialogue, and continues
+  beyond frame 25797 at the 200-second watchdog. Tested on PC, MSVC Release
+  with guest tracing enabled; story captures inspected at 9000 and 11400.
+- [confirmed] Cause: VFPU branches always became false in emitted C; `vcst`
+  also used the wrong constant-selector field. Both corrected. Synthetic
+  generated-C execution tests fail before the fixes and pass afterward.
+- Playable combat and completion of a battle remain unverified.
 - Not accepted by the user; nothing released. No Switch build yet.
 
 ## How it is built
 
 - Translator and runtime: psprecomp v0.6.0 (MIT), copied into
   third_party/psprecomp with our changes listed in its UPSTREAM.md. Decryption
-  code removed from the copy. Toolkit tests: 25/25 pass (4 runs).
+  code removed from the copy. Toolkit tests: 27/27 pass after the corrections;
+  the new branch execution test covers 3072 cases.
 - tools/build_game.py: generates C for main + 11 overlays into build/gen/
   (function-start hints, overlay symbol prefixes, overlay table, all 228
   firmware stubs). games/dbz/: host program and overlay swap hooks.
@@ -44,14 +51,15 @@ on PC through its menus. Destination: native Switch OLED and Switch 2.
    A=Square, S=Triangle, Q/W=L/R, Enter=Start; Xbox pad works.
    Test switches: DBZ_SHOTS=<dir>, DBZ_PRESS="frame:button,...",
    PSPRECOMP_TRACE_HLE=N, PSPRECOMP_TRACE_IO=1, DBZ_LOG_OVERLAYS=1,
-   DBZ_DUMP_SEC=<s> (threads + last 64 firmware calls).
+   DBZ_DUMP_SEC=160,200 (timed thread/call/entry/loop snapshots).
+   Configure with -DDBZ_TRACE=ON to enable guest entry/back-edge tracing;
+   the default is OFF. Diagnostic runs use separate filesystem/save roots.
 
 ## Next small tasks
 
-1. Find the battle-load hang. Watchdog (DBZ_DUMP_SEC) shows a thread looping on
-   sceKernelCpuSuspendIntr/ResumeIntr: likely waiting for an interrupt or GE
-   callback the runtime never delivers. Handed to Codex (local AI_HANDOFF.md).
-2. Reach a playable battle on PC; then sound output and music decoding.
+1. Continue the first stage's story introduction and reach a playable battle
+   on PC. The prior loading stall is resolved; see battle-load.md.
+2. Test a battle through completion; then sound output and music decoding.
 3. Switch: port the window/input/audio layer to libnx (devkitA64 is
    installed), build an NRO, test on the OLED.
 
@@ -60,3 +68,4 @@ on PC through its menus. Destination: native Switch OLED and Switch 2.
 - [Overlay rules](docs/notes/overlays.md), [Plan](docs/notes/plan.md),
   [Metadata](docs/notes/metadata.md), [Research](docs/notes/research.md),
   [Recon](docs/notes/recon.md), [Imports](docs/notes/imports.md)
+- [Stage loading diagnosis and reproduction](docs/notes/battle-load.md)

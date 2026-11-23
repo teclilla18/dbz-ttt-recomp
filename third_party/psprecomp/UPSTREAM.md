@@ -15,6 +15,12 @@ Recompiler (`tools/allegrexrecomp`):
 - Analyzer reads only complete 4-byte words (`tools/patches/psprecomp-complete-word.patch`).
 - `[[function]]` hints: extra function starts fed into discovery.
 - Whole-number VFPU immediates emitted as `(float)N` (was the invalid `Nf`).
+- `vcst` uses its five-bit constant selector (bits 20..16), instead of the
+  unrelated source-register field. Original synthetic generated-C execution
+  test covers 19 defined constants in all four vector widths.
+- `bvf/bvt/bvfl/bvtl` test their selected VFPU condition bit (previously always
+  false). Original compiled synthetic branch programs cover 3,072 cases,
+  including likely-slot nullification and condition changes in delay slots.
 - New ops: `vcmovt/vcmovf`, VFPU random (`vrnds/vrndi/vrndf1/vrndf2`),
   `floor.w.s`, `ceil.w.s`, `round.w.s`.
 

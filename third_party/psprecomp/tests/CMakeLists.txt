@@ -26,6 +26,40 @@ add_executable(test_emit test_emit.c)
 target_link_libraries(test_emit PRIVATE allegrex_core)
 add_test(NAME emit COMMAND test_emit)
 
+# Exercise emitted C as well as the decoder and runtime separately.
+add_executable(gen_vcst gen_vcst.c)
+target_link_libraries(gen_vcst PRIVATE allegrex_core)
+set(vcst_dir "${CMAKE_CURRENT_BINARY_DIR}/vcst")
+file(MAKE_DIRECTORY "${vcst_dir}")
+add_custom_command(
+    OUTPUT "${vcst_dir}/t_vcst_funcs_000.c" "${vcst_dir}/t_vcst_register.c"
+           "${vcst_dir}/t_vcst_funcs.h" "${vcst_dir}/t_vcst_imports.c"
+    COMMAND gen_vcst "${vcst_dir}"
+    DEPENDS gen_vcst
+    VERBATIM)
+add_executable(test_emitted_vcst test_emitted_vcst.c
+    "${vcst_dir}/t_vcst_funcs_000.c" "${vcst_dir}/t_vcst_register.c"
+    "${vcst_dir}/t_vcst_imports.c")
+target_link_libraries(test_emitted_vcst PRIVATE psprecomp)
+add_test(NAME emitted_vcst COMMAND test_emitted_vcst)
+
+add_executable(gen_vfpu_branches gen_vfpu_branches.c)
+target_link_libraries(gen_vfpu_branches PRIVATE allegrex_core)
+set(vbranch_dir "${CMAKE_CURRENT_BINARY_DIR}/vbranch")
+file(MAKE_DIRECTORY "${vbranch_dir}")
+add_custom_command(
+    OUTPUT "${vbranch_dir}/t_vbranch_funcs_000.c" "${vbranch_dir}/t_vbranch_register.c"
+           "${vbranch_dir}/t_vbranch_funcs.h" "${vbranch_dir}/t_vbranch_imports.c"
+    COMMAND gen_vfpu_branches "${vbranch_dir}"
+    DEPENDS gen_vfpu_branches
+    VERBATIM)
+add_executable(test_emitted_vfpu_branches test_emitted_vfpu_branches.c
+    "${vbranch_dir}/t_vbranch_funcs_000.c" "${vbranch_dir}/t_vbranch_register.c"
+    "${vbranch_dir}/t_vbranch_imports.c")
+target_link_libraries(test_emitted_vfpu_branches PRIVATE psprecomp)
+add_test(NAME emitted_vfpu_branches COMMAND test_emitted_vfpu_branches)
+set_tests_properties(emitted_vcst emitted_vfpu_branches PROPERTIES TIMEOUT 10)
+
 add_executable(test_hle test_hle.c)
 target_link_libraries(test_hle PRIVATE psprecomp allegrex_core)
 add_test(NAME hle COMMAND test_hle)

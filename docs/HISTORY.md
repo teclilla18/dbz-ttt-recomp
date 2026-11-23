@@ -1,5 +1,23 @@
 # History
 
+## 2026-11-22: first-stage loading stall corrected (Codex)
+
+- Reproduced the stall with a separate fresh save root. Timed entry/back-edge
+  traces identified an angle loop receiving NaN, rather than a firmware wait.
+- Corrected two emitter errors: `vcst` selected constants from the wrong field,
+  and all four VFPU branch forms became constant false. No game code patched.
+- Original generated-C execution tests reproduce both failures before their
+  corrections and pass afterward: 19 constants at four widths, and 3072 branch
+  cases covering condition bits and delay slots. Toolkit 27/27 and project
+  Python 17/17 tests pass; full regeneration and MSVC Release linking pass.
+- [confirmed] The same boot/menu/stage route now passes the loading screen,
+  reaches story pages and advances scripted dialogue. Watchdogs progress from
+  frame 17790 at 160 seconds to 25797 at 200 seconds.
+  Tested with guest tracing enabled; playable combat is not yet verified.
+- Added optional trace configuration and multiple timed watchdog snapshots.
+  Research/provenance and reproduction are in docs/notes/battle-load.md.
+  No console test, gameplay acceptance or release.
+
 ## 2026-11-22: first boot to the Main Menu (Claude Code)
 
 - Copied psprecomp v0.6.0 (MIT) into third_party/psprecomp, removed its

@@ -524,7 +524,10 @@ static void emit_simple(ectx *c, const a_insn *in, const char *ind) {
         fprintf(f, "%spsp_vidt(%u, %u);\n", ind, in->vd, in->vsize);
         return;
     case A_VCST:
-        fprintf(f, "%spsp_vcst(%u, %u, %u);\n", ind, in->vd, in->vs, in->vsize);
+        /* The constant selector is imm5 in bits 20..16, not a source
+         * register in bits 14..8. See the VFPU vcst encoding. */
+        fprintf(f, "%spsp_vcst(%u, %u, %u);\n", ind, in->vd,
+                (in->raw >> 16) & 31u, in->vsize);
         return;
 
     /* Immediate loads: the value is in the instruction, not a register. */
@@ -605,6 +608,10 @@ static void branch_cond(char *buf, size_t n, const a_insn *in) {
     case A_BGEZAL: case A_BGEZALL: snprintf(buf, n, "(int32_t)%s >= 0", rs); break;
     case A_BC1T: case A_BC1TL: snprintf(buf, n, "psp_fpu_cond()"); break;
     case A_BC1F: case A_BC1FL: snprintf(buf, n, "!psp_fpu_cond()"); break;
+    case A_BVT: case A_BVTL:
+        snprintf(buf, n, "((psp_cpu.vfpu_cc >> %u) & 1u)", (in->raw >> 18) & 7u); break;
+    case A_BVF: case A_BVFL:
+        snprintf(buf, n, "!((psp_cpu.vfpu_cc >> %u) & 1u)", (in->raw >> 18) & 7u); break;
     default:                   snprintf(buf, n, "0 /* unhandled branch */"); break;
     }
 }

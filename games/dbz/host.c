@@ -7,6 +7,7 @@
 #include "dbz_overlays.h"
 
 #include <psprecomp/cpu.h>
+#include <psprecomp/dispatch.h>
 #include <psprecomp/mem.h>
 #include <psprecomp/hle.h>
 #include <psprecomp/module.h>
@@ -48,22 +49,38 @@ static int load_extra_segments(const char *path) {
     return 0;
 }
 
-/* DBZ_DUMP_SEC=<s>: a separate host thread prints thread states and recent
- * firmware calls after that many seconds, even if a guest thread never yields. */
+/* DBZ_DUMP_SEC=120,200: nominal elapsed seconds from watchdog start. A separate
+ * host thread can report a guest that never yields. */
 #ifdef _WIN32
 #include <windows.h>
 static DWORD WINAPI watchdog(LPVOID arg) {
-    Sleep((DWORD)(intptr_t)arg * 1000u);
 #else
 #include <pthread.h>
 #include <unistd.h>
 static void *watchdog(void *arg) {
-    sleep((unsigned)(intptr_t)arg);
 #endif
-    fprintf(stderr, "[dbz] watchdog dump at frame %llu\n", (unsigned long long)psp_display_vblanks());
-    psp_threadman_dump(stderr);
-    psp_hle_dump_ring(stderr);
-    fflush(stderr);
+    const char *next = (const char *)arg;
+    unsigned long previous = 0;
+    while (*next) {
+        char *end;
+        unsigned long at = strtoul(next, &end, 10);
+        if (end == next || at <= previous || at > 86400) break;
+#ifdef _WIN32
+        Sleep((DWORD)(at - previous) * 1000u);
+#else
+        sleep((unsigned)(at - previous));
+#endif
+        fprintf(stderr, "[dbz] watchdog %lu s at frame %llu, last entry 0x%08X, loop 0x%08X (%llu hits)\n",
+                at, (unsigned long long)psp_display_vblanks(), psp_trace_last(),
+                psp_trace_loop_addr(), (unsigned long long)psp_trace_loop_hits());
+        psp_threadman_dump(stderr);
+        psp_hle_dump_ring(stderr);
+        psp_trace_dump();
+        fflush(stderr);
+        previous = at;
+        if (*end != ',') break;
+        next = end + 1;
+    }
     return 0;
 }
 
@@ -98,12 +115,13 @@ int main(int argc, char **argv) {
     fflush(stdout);
 
     if (getenv("DBZ_DUMP_SEC")) {
-        intptr_t secs = atol(getenv("DBZ_DUMP_SEC"));
+        const char *secs = getenv("DBZ_DUMP_SEC");
 #ifdef _WIN32
-        CreateThread(NULL, 0, watchdog, (LPVOID)secs, 0, NULL);
+        HANDLE t = CreateThread(NULL, 0, watchdog, (LPVOID)secs, 0, NULL);
+        if (t) CloseHandle(t);
 #else
         pthread_t t;
-        pthread_create(&t, NULL, watchdog, (void *)secs);
+        if (!pthread_create(&t, NULL, watchdog, (void *)secs)) pthread_detach(t);
 #endif
     }
     psp_module_start(&m);

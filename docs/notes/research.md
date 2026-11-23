@@ -1,5 +1,31 @@
 # Reuse proven tools before building PSP
 
+## PC stage-load investigation (2026-11-22)
+
+- Rechecked [psprecomp's threading contract](https://github.com/sp00nznet/psprecomp/blob/main/docs/THREADING.md)
+  (MIT): scheduling is cooperative; a guest loop without a wait can starve the
+  other threads. Reuse its existing function-entry and back-edge tracing to
+  distinguish that case from repeated firmware work. No new upstream code copied.
+- Rechecked [PSPSDK interrupt documentation](https://pspdev.github.io/pspsdk/group__IntrMan.html)
+  ([BSD-style licence](https://github.com/pspdev/pspsdk/blob/master/LICENSE)):
+  suspend returns the prior interrupt state for resume. Frequent suspend/resume
+  calls alone do not identify an interrupt wait. Interface facts only.
+- [Independent PSPRecomp decoder](https://github.com/jessicanataliagta/PSPRecomp/blob/main/src/decoder.cpp)
+  (MIT) and [VFPU instruction documentation](https://davidgfnet.github.io/psp-vfpu-docs/#vcst.s)
+  ([GPL-3.0 documentation/tests](https://github.com/davidgfnet/psp-vfpu-docs/blob/master/LICENSE)):
+  `vcst` selects a constant with a five-bit immediate, not its source-register
+  field. Learned instruction facts; copied no code, pseudocode or tests.
+  Our emitter correction uses bits 20..16; our synthetic test generates,
+  compiles and executes all four widths with mathematical expected values.
+- The same VFPU documentation describes `bvf`, `bvt`, `bvfl` and `bvtl` as
+  tests of a selected VFPU condition bit. Our emitter previously fell through
+  to a constant-false condition for all four. Original synthetic programs now
+  exercise six condition bits, all 64 combinations, true/false branches and
+  ordinary/likely delay slots, including a slot that changes the condition.
+  No reference implementation or test code copied.
+
+## Original survey
+
 Survey checked 2026-11-22. **Evaluate an existing PSP C toolchain before writing
 a new translator.** Released Zelda and Sonic ports establish the method, while
 an existing Tenkaichi Tag Team project directly supports investigating overlays.

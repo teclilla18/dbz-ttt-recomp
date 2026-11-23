@@ -2,7 +2,8 @@
 
 Work toward a native port of the PSP game for Nintendo Switch and Switch 2.
 PC runs are for development and checks. The recompiled game boots on PC to its
-Main Menu; battles do not run yet, and there is no Switch build yet. See
+Main Menu and first-stage story introduction; playable battles remain unverified,
+and there is no Switch build yet. See
 [STATE.md](STATE.md). The translator and runtime are an extended copy of
 [psprecomp](https://github.com/sp00nznet/psprecomp) (MIT) in `third_party/psprecomp`.
 Goal order: stable PC checks, Switch, Switch 2, then online.
@@ -72,7 +73,9 @@ patch described above; its upstream notice is included.
   [wizardengineer](https://github.com/wizardengineer/psprecomp).
 - PSP behaviour and interfaces: [PPSSPP](https://github.com/hrydgard/ppsspp),
   [JPCSP](https://github.com/jpcsp/jpcsp) and
-  [pspdev / PSPSDK](https://github.com/pspdev/pspsdk).
+  [pspdev / PSPSDK](https://github.com/pspdev/pspsdk) and
+  [PSP VFPU documentation](https://davidgfnet.github.io/psp-vfpu-docs/)
+  (GPL-3.0, instruction facts only; no code or tests copied).
 - Inspection tools: [John-K/pspdecrypt](https://github.com/John-K/pspdecrypt),
   [kotcrab/ghidra-allegrex](https://github.com/kotcrab/ghidra-allegrex) and
   [pspdev/prxtool](https://github.com/pspdev/prxtool).

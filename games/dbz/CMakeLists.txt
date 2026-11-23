@@ -14,6 +14,10 @@ if(NOT DBZ_GEN)
 endif()
 
 add_executable(dbz_ttt host.c overlays.c ${DBZ_GEN})
+option(DBZ_TRACE "Record guest function entries and loop addresses for PC diagnosis" OFF)
+if(DBZ_TRACE)
+    target_compile_definitions(dbz_ttt PRIVATE PSPRECOMP_TRACE)
+endif()
 target_include_directories(dbz_ttt PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_compile_definitions(dbz_ttt PRIVATE
     DBZ_MAIN_ELF="${DBZ_MAIN_ELF}" DBZ_FS_ROOT="${DBZ_FS_ROOT}" DBZ_ISO_PATH="${DBZ_ISO_PATH}")
