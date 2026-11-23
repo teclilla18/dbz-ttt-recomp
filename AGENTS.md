@@ -20,7 +20,10 @@ rules, the Switch platform layer and the online lockstep ideas, not the CPU or g
 2. The GitHub repo stays **private** until the user decides otherwise.
 3. Never modify the user's original game file. Work on a copy in `baserom/` (gitignored).
 4. No personal details in tracked files (home paths, drive letters, emails): write `<home>`, `<repo>`, `<sd>`.
-5. **Learn from others first (the user's wish).** Before building any part, search online for projects that already
+5. **Learn from others first (the user's wish, repeated 2026-11-23).** Every task, for Claude Code and Codex alike:
+   search online first and skip as much work as possible where others already have what we need. Check the
+   user's own repos (https://github.com/teclilla18, e.g. sonic-riders-recomp's renderer and Switch layer) and
+   similar projects, then build only the missing part. Before building any part, search online for projects that already
    solved it (static recompilers, PSP emulators, decompilation tools, Switch homebrew) and reuse what works: their
    tools as they are, their code where the licence allows, their ideas always. Record every source in
    `docs/notes/research.md` (link, licence, what we took or learned) and credit it in the README.
