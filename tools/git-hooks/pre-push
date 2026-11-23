@@ -1,0 +1,9 @@
+#!/bin/sh
+set -eu
+cd "$(git rev-parse --show-toplevel)"
+if command -v python >/dev/null 2>&1; then
+    python tools/check_no_game_data.py --staged
+    exec python tools/check_no_game_data.py --history
+fi
+py -3 tools/check_no_game_data.py --staged
+exec py -3 tools/check_no_game_data.py --history
