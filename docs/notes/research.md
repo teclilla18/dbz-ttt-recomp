@@ -256,3 +256,12 @@ The resulting Phase 1 proposal is:
 
 These steps match [plan.md](plan.md). Phase 0 stops here. Translation checks,
 native boot, user-accepted gameplay and release remain separate milestones.
+
+
+## Owner's own ports (reviewed 2026-11-23)
+
+| Source | Licence | What we take |
+|---|---|---|
+| [sonic-riders-recomp](https://github.com/teclilla18/sonic-riders-recomp) (local copy on the owner's Desktop) | MPL-2.0, same owner | **Renderer design to copy for 60 fps on Switch:** guest GPU command stream -> per-frame command lists (`runtime/src/gx_render.h`), thin backends `platform/host/render_gl.c` (PC OpenGL) and `platform/switch/render_deko.c` (deko3d), one ubershader reading raw register state. Also its Switch platform layer (`platform_switch.c`, `input_hid.c`, `audio_switch.c`), frame pacing and netplay. Adapt for the PSP GE, not copied blindly (different GPU). |
+| [SwitchWakerHD](https://github.com/teclilla18/SwitchWakerHD) | owner's | Second deko3d renderer example (Wii U). Read when building the Switch backend. |
+| sonic-heroes-recomp, custom-robo-recomp | owner's | Later GameCube ports sharing the Riders runtime; how a new game was started. |

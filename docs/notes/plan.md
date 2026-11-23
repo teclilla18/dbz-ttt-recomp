@@ -111,3 +111,13 @@ Phase 2 then handles PC boot, firmware calls, graphics, sound and controls.
   concrete reuse decision needs it. No GPL adoption is needed for Phase 0.
 - [uncertain] Overlay loader behaviour, media subtypes and dynamic firmware
   module list need more analysis; see the limits in recon.md.
+
+
+## Switch timing (owner decision, 2026-11-23)
+
+Hold the Switch build until the game is predicted to run playable at 60 fps on
+Switch. Route: fix PC correctness first (fighters, sound), then replace the
+software renderer with a GE -> command-list front-end and GPU backends (PC
+OpenGL, Switch deko3d) following the owner's Sonic Riders port design, then
+measure and estimate Switch speed before porting. The NSP forwarder request
+(own logo, own console keys kept local, SD card) waits for that point.
