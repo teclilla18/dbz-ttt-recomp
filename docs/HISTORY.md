@@ -1,5 +1,24 @@
 # History
 
+## 2026-11-22: GE relative addresses and Free Battle progression
+
+- Confirmed that combat uses origin-relative vertices; the old runtime reads
+  near address zero instead. Corrected BASE/offset composition, ORIGIN, 28-bit
+  targets and CALL/RET offset preservation across stalls.
+- Intermediate game run exposed cached-alias stall comparisons. Normalized
+  list/stall pointers too; the incomplete version was not committed.
+- Eleven original synthetic display-list cases check exact output pixels and
+  stop-point behaviour. Initial address cases fail before correction; all pass
+  afterward. Toolkit full recheck 28/28; Python 17/17; MSVC Release game links.
+  One existing HLE sleep-duration assertion failed once, then passed isolated
+  and full rechecks; thread timing implementation unchanged.
+- Free Battle reaches a fight and WIN results. Arena appears at fight start
+  and behind results, but later fight captures black out. Uploaded world matrix
+  contains NaNs; unsupported `vsocp` and fighter visibility remain to investigate.
+- Added GE statistics to host dumps and a short range option for existing GE
+  tracing. Evidence and licence boundaries in ge-addressing.md / research.md.
+  Not playable/stable validation, user acceptance, console testing or release.
+
 ## 2026-11-22: PC continuation checkpoint for another Codex agent
 
 - With tracing OFF and separate fresh saves, advanced the first campaign stage

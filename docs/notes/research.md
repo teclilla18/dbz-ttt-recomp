@@ -1,5 +1,33 @@
 # Reuse proven tools before building PSP
 
+## Missing-3D diagnosis (2026-11-22)
+
+- Rechecked [psprecomp renderer design](https://github.com/sp00nznet/psprecomp/blob/main/docs/RENDERER.md)
+  (MIT): keep display-list interpretation shared and diagnose command/vertex
+  counts before trusting pixels. Used the existing GE statistics in host dumps;
+  extended the existing local trace to a short inclusive vblank range so it
+  also captures lists submitted only on alternate vblanks. Original changes.
+- Rechecked [PSPSDK GU interfaces](https://pspdev.github.io/pspsdk/group__GU.html),
+  [vertex field definitions](https://github.com/pspdev/pspsdk/blob/master/src/gu/pspgu.h),
+  [bone uploads](https://github.com/pspdev/pspsdk/blob/master/src/gu/sceGuBoneMatrix.c)
+  and [GE commands](https://github.com/pspdev/pspsdk/blob/master/src/gu/doc/commands.txt).
+  [BSD-style licence](https://github.com/pspdev/pspsdk/blob/master/LICENSE).
+  Learned public field layouts and matrix-upload facts; no source copied.
+- The Free Battle route executes an unsupported VFPU operation at guest
+  `0x0880F3E8`. Its opcode fields identify `vsocp`, described by the previously
+  credited [VFPU reference](https://davidgfnet.github.io/psp-vfpu-docs/#vsocp.s)
+  (GPL-3.0). Behaviour facts only; no reference code or tests copied. Its
+  contribution to the rendering failure is not established at this checkpoint.
+- [PPSSPP GE list execution](https://github.com/hrydgard/ppsspp/blob/master/GPU/GPUCommon.cpp)
+  and [address state](https://github.com/hrydgard/ppsspp/blob/master/GPU/GPUState.h)
+  (GPL-2.0-or-later): read to cross-check address behaviour. BASE and offset
+  are independent; ORIGIN uses the command's address as the offset; addition
+  precedes the 28-bit address mask; ordinary CALL/RET restores the offset but
+  leaves BASE as changed by the callee. Learned hardware-behaviour facts only.
+  No source/pseudocode/tests copied. Original synthetic display lists check
+  vertex/index addresses, additive carries, jumps and nested calls across a
+  stall, using fixed expected pixel locations.
+
 ## PC stage-load investigation (2026-11-22)
 
 - Rechecked [psprecomp's threading contract](https://github.com/sp00nznet/psprecomp/blob/main/docs/THREADING.md)

@@ -25,6 +25,11 @@ Recompiler (`tools/allegrexrecomp`):
   `floor.w.s`, `ceil.w.s`, `round.w.s`.
 
 Runtime (`src/`):
+- GE relative addressing: ORIGIN/OFFSET_ADDR supply an additive offset separate
+  from BASE, with 28-bit targets for vertices, indices, JUMP and CALL. CALL/RET
+  saves/restores that offset; return stacks survive list stalls. List/stall
+  pointers collapse cached aliases to the same 28-bit addresses. Original
+  synthetic display-list pixel tests in test_ge_address.c.
 - `psp_dispatch_clear_range` and label re-registration, for overlays that share
   one address window.
 - Threads: per-thread `$k0` block, start arguments copied onto the new stack,

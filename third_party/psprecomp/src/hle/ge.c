@@ -127,7 +127,9 @@ typedef struct {
     uint32_t list;      /* current read pointer */
     uint32_t stall;     /* stop before this address; 0 means "no stall" */
     uint32_t base;      /* GE_BASE: high bits for addresses */
-    uint32_t origin;
+    uint32_t offset;    /* ORIGIN or OFFSET_ADDR, added after BASE composition */
+    uint32_t return_pc[GE_STACK], return_offset[GE_STACK];
+    int      depth;     /* persists when a stalled list resumes */
     int      used;
     int      done;
 } ge_queue;
@@ -525,12 +527,19 @@ static int read_vertex(uint32_t addr, uint32_t vtype, int tex_off, int col_off,
 }
 
 
-/* PSPRECOMP_TRACE_GE=<frame> logs every primitive drawn during that vblank:
+/* PSPRECOMP_TRACE_GE=<first>[,<last>] logs commands and primitives in that
+ * inclusive vblank range. A small range also covers games that submit lists
+ * only on every other vblank.
  * what it is, its vertex format, and the texture state it is drawn with. */
 static int trace_frame(void) {
-    static long f = -2;
-    if (f == -2) { const char *e = getenv("PSPRECOMP_TRACE_GE"); f = e ? atol(e) : -1; }
-    return f >= 0 && (long)psp_display_vblanks() == f;
+    static long first = -2, last = -1;
+    if (first == -2) {
+        const char *e = getenv("PSPRECOMP_TRACE_GE");
+        first = last = e ? atol(e) : -1;
+        if (e && strchr(e, ',')) last = atol(strchr(e, ',') + 1);
+    }
+    uint64_t frame = psp_display_vblanks();
+    return first >= 0 && frame >= (uint64_t)first && frame <= (uint64_t)last;
 }
 
 static void draw_prim(uint32_t type, uint32_t count) {
@@ -588,9 +597,15 @@ static uint32_t fb_vram(void) { return PSP_VRAM_BASE | (g_ge.fbp & (PSP_VRAM_SIZ
  * The budget is not paranoia: a list whose JUMP forms a cycle is a normal
  * intermediate state while the CPU is still writing, and without a bound a
  * malformed or partially-written list hangs the host with no diagnostic. */
+/* BASE supplies address bits 24..27; the independent offset is additive.
+ * ORIGIN sets that offset to its own command address. Final addresses are
+ * 28-bit. This applies equally to data and control-flow targets. */
+static uint32_t list_address(const ge_queue *q, uint32_t low) {
+    uint32_t address = q->base | (low & 0x00FFFFFFu);
+    return (address + q->offset) & 0x0FFFFFFFu;
+}
+
 static void run_list(ge_queue *q) {
-    uint32_t stack[GE_STACK];
-    int sp = 0;
     uint64_t budget = 1u << 22;
 
     g_ge.lists++;
@@ -625,14 +640,20 @@ static void run_list(ge_queue *q) {
             break;
 
         case GE_JUMP:
-            q->list = (q->base | (arg & 0xFFFFFC));
+            q->list = list_address(q, arg & 0xFFFFFC);
             break;
         case GE_CALL:
-            if (sp < GE_STACK) stack[sp++] = q->list;
-            q->list = (q->base | (arg & 0xFFFFFC));
+            if (q->depth < GE_STACK) {
+                q->return_pc[q->depth] = q->list;
+                q->return_offset[q->depth++] = q->offset;
+                q->list = list_address(q, arg & 0xFFFFFC);
+            }
             break;
         case GE_RET:
-            if (sp > 0) q->list = stack[--sp];
+            if (q->depth > 0) {
+                q->list = q->return_pc[--q->depth] & 0x0FFFFFFFu;
+                q->offset = q->return_offset[q->depth];
+            }
             break;
         case GE_BJUMP:
             /* Conditional on the bounding-box test, which needs geometry we do
@@ -656,9 +677,9 @@ static void run_list(ge_queue *q) {
              * (no scheduler), so this is recorded and ignored. */
             break;
 
-        case GE_BASE:        q->base = (arg & 0xFF0000) << 8; break;
-        case GE_ORIGIN_ADDR: q->origin = q->list - 4; break;
-        case GE_OFFSET_ADDR: q->base = arg << 8; break;
+        case GE_BASE:        q->base = (arg & 0x0F0000) << 8; break;
+        case GE_ORIGIN_ADDR: q->offset = q->list - 4; break;
+        case GE_OFFSET_ADDR: q->offset = arg << 8; break;
 
         case GE_VTYPE: g_ge.vtype = arg; break;
         case GE_FBP:
@@ -786,8 +807,8 @@ static void run_list(ge_queue *q) {
         case GE_SFIX:  g_ds.blend_sfix = arg; break;
         case GE_DFIX:  g_ds.blend_dfix = arg; break;
 
-        case GE_VADDR: g_ge.vaddr = (q->base | (arg & 0xFFFFFF)); break;
-        case GE_IADDR: g_ge.iaddr = (q->base | (arg & 0xFFFFFF)); break;
+        case GE_VADDR: g_ge.vaddr = list_address(q, arg); break;
+        case GE_IADDR: g_ge.iaddr = list_address(q, arg); break;
 
         default:
             if (light_cmd(cmd, arg)) break;
@@ -820,8 +841,10 @@ static void enqueue(int head) {
 
     memset(q, 0, sizeof *q);
     q->id    = g_next_id++;
-    q->list  = psp_arg(0) & ~3u;
-    q->stall = psp_arg(1) & ~3u;
+    /* Cached and uncached aliases name the same GE address. Stall comparison
+     * must use the same 28-bit form as resolved JUMP/CALL targets. */
+    q->list  = psp_arg(0) & 0x0FFFFFFCu;
+    q->stall = psp_arg(1) & 0x0FFFFFFCu;
     q->used  = 1;
     (void)head;
 
@@ -846,7 +869,7 @@ static void hle_ListUpdateStallAddr(void) {
                                                     : SCE_KERNEL_ERROR_UNKNOWN_UID);
         return;
     }
-    q->stall = psp_arg(1) & ~3u;
+    q->stall = psp_arg(1) & 0x0FFFFFFCu;
     if (!q->done) run_list(q);          /* the new stall released more commands */
     psp_ret(SCE_KERNEL_ERROR_OK);
 }

@@ -96,6 +96,11 @@ add_executable(test_raster test_raster.c)
 target_link_libraries(test_raster PRIVATE psprecomp)
 add_test(NAME raster COMMAND test_raster)
 
+add_executable(test_ge_address test_ge_address.c)
+target_link_libraries(test_ge_address PRIVATE psprecomp)
+add_test(NAME ge_address COMMAND test_ge_address)
+set_tests_properties(ge_address PROPERTIES TIMEOUT 10)
+
 add_executable(test_guest_calls test_guest_calls.c)
 target_link_libraries(test_guest_calls PRIVATE psprecomp)
 add_test(NAME guest_calls COMMAND test_guest_calls)

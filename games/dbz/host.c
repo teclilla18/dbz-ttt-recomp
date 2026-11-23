@@ -75,6 +75,7 @@ static void *watchdog(void *arg) {
                 psp_trace_loop_addr(), (unsigned long long)psp_trace_loop_hits());
         psp_threadman_dump(stderr);
         psp_hle_dump_ring(stderr);
+        psp_ge_dump_stats(stderr);
         psp_trace_dump();
         fflush(stderr);
         previous = at;
@@ -163,6 +164,7 @@ int main(int argc, char **argv) {
             fprintf(stderr, "[dbz] dump at frame %llu\n", (unsigned long long)psp_display_vblanks());
             psp_threadman_dump(stderr);
             psp_hle_dump_ring(stderr);
+            psp_ge_dump_stats(stderr);
             fflush(stderr);
         }
         if (npress) {

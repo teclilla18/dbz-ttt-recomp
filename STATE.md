@@ -17,19 +17,23 @@ the first stage's story introduction. Destination: native Switch OLED and Switch
 - [confirmed] Cause: VFPU branches always became false in emitted C; `vcst`
   also used the wrong constant-selector field. Both corrected. Synthetic
   generated-C execution tests fail before the fixes and pass afterward.
-- Playable combat and completion of a battle remain unverified.
+- [confirmed] Scripted Free Battle reaches combat and a WIN results screen.
+  GE origin/offset addressing is corrected; the arena appears at fight start.
+  Later frames still black out and fighters are not verified visible. A traced
+  world matrix contains NaNs; `vsocp` at `0x0880F3E8` remains unsupported.
+  This is simulation progression, not playable/stable battle validation.
 - [confirmed] PC Release with tracing OFF advances further through campaign
   story, "Find Gohan" mission start and movement tutorial. Exploration capture
   shows HUD over a black field; world/characters are not visible. Cause unproven.
-- [confirmed] Choosing Free Battle loads overlay 5. The latest automated run
-  was deliberately stopped for handoff before combat was checked.
+- [confirmed] Free Battle uses overlay 5 for selection; its fight continues
+  without a new overlay load on the tested route. See ge-addressing.md.
 - Not accepted by the user; nothing released. No Switch build yet.
 
 ## How it is built
 
 - Translator and runtime: psprecomp v0.6.0 (MIT), copied into
   third_party/psprecomp with our changes listed in its UPSTREAM.md. Decryption
-  code removed from the copy. Toolkit tests: 27/27 pass after the corrections;
+  code removed from the copy. Toolkit tests: 28/28 pass after the corrections;
   the new branch execution test covers 3072 cases.
 - tools/build_game.py: generates C for main + 11 overlays into build/gen/
   (function-start hints, overlay symbol prefixes, overlay table, all 228
@@ -62,8 +66,8 @@ the first stage's story introduction. Destination: native Switch OLED and Switch
 
 ## Next small tasks
 
-1. Continue the Free Battle route to reach combat, and diagnose the campaign's
-   black exploration field. See battle-load.md for local evidence and scripts.
+1. Diagnose invalid world transforms / unsupported `vsocp` in combat. Relative
+   GE addresses and cached-alias stop points now have synthetic regression tests.
 2. Test a battle through completion; then sound output and music decoding.
 3. Switch: port the window/input/audio layer to libnx (devkitA64 is
    installed), build an NRO, test on the OLED.
@@ -78,3 +82,4 @@ the first stage's story introduction. Destination: native Switch OLED and Switch
   [Recon](docs/notes/recon.md), [Imports](docs/notes/imports.md)
 - [Stage loading diagnosis and reproduction](docs/notes/battle-load.md)
 - [OLED menu and battle controls requirement](docs/notes/controls.md)
+- [GE addressing correction and remaining rendering gaps](docs/notes/ge-addressing.md)
