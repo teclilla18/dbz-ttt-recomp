@@ -109,8 +109,13 @@ The bytes stay in memory until the next load overwrites them.
    a bug: stop with a clear message, never guess.
 4. Each overlay is translated separately with its own symbol prefix.
 
+## Live confirmation (2026-11-22)
+
+- [confirmed] In the recompiled game the loader opens paths of the form
+  `disc0:/sce_lbn0x<sector>_size0x<bytes>`, and overlays load in the order
+  1 -> 3 -> 11 -> 4 from boot to the first stage, each via the hooked runners.
+
 ## Not done yet
 
-- No run in an emulator to watch a real load ([uncertain] path string form).
 - Which main functions run under which scene is not mapped.
 - No dispatch code written.

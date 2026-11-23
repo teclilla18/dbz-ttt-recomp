@@ -76,7 +76,10 @@ def inspect(path, mode, oid):
         reasons.append('email address')
     if SECRET.search(text) or HEX_TABLE.search(text):
         reasons.append('possible secret or key byte table')
-    if ASM.search(text) or GENERATED.search(text):
+    # The copied toolkit's own sources describe the C they emit ("... by
+    # allegrexrecomp"); only that wording check is skipped there.
+    vetted_tool = lower.startswith('third_party/psprecomp/')
+    if ASM.search(text) or (GENERATED.search(text) and not vetted_tool):
         reasons.append('possible disassembly or recompiled game code')
     return reasons
 

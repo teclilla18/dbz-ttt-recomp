@@ -4,7 +4,8 @@ Phase 0 is complete. Findings are in [recon.md](recon.md), the full
 reuse survey in [research.md](research.md), and system NIDs in [imports.md](imports.md).
 Phase 1 task 1 is complete: [external tool evaluation](tool-evaluation.md).
 Local trial C was emitted and object compilation checked; nothing was booted.
-Production translator selection remains open. Later phases remain proposals.
+Translator decision (2026-11-22): psprecomp (MIT) is the base, copied into
+third_party/psprecomp and extended. Later phases remain proposals.
 Task 2a is complete: [main metadata and analyzer bounds](metadata.md). The
 prepared main now scans successfully; overlay loading is the next small task.
 

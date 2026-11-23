@@ -1,10 +1,10 @@
 # DBZ Tenkaichi Tag Team recompilation research
 
 Work toward a native port of the PSP game for Nintendo Switch and Switch 2.
-PC runs are for development and checks. There is no playable port or adopted
-recompiler/runtime yet. Phase 0 is complete; the first Phase 1
-[tool evaluation](docs/notes/tool-evaluation.md) found useful components and gaps.
-The next checkpoint [recovers main metadata and fixes a scan overrun](docs/notes/metadata.md).
+PC runs are for development and checks. The recompiled game boots on PC to its
+Main Menu; battles do not run yet, and there is no Switch build yet. See
+[STATE.md](STATE.md). The translator and runtime are an extended copy of
+[psprecomp](https://github.com/sp00nznet/psprecomp) (MIT) in `third_party/psprecomp`.
 Goal order: stable PC checks, Switch, Switch 2, then online.
 
 Read [AGENTS.md](AGENTS.md), [STATE.md](STATE.md), the
@@ -45,9 +45,10 @@ must be installed in each new clone; they are not a server-side guarantee.
 
 Keep the game in ignored `baserom/`, generated output in ignored `build/`, and
 machine-specific notes in ignored `AI_HANDOFF.md` or `.local/`. External research
-tools stay outside this repository. The small analyzer correction preserves
-its [MIT notice](third_party/licenses/psprecomp.txt); no full external tool/runtime
-is vendored. The overall project licence has not been chosen.
+tools stay outside this repository. psprecomp is copied in with its
+[MIT licence](third_party/psprecomp/LICENSE) and a list of our changes
+([UPSTREAM.md](third_party/psprecomp/UPSTREAM.md)); its decryption code was removed.
+The overall project licence has not been chosen.
 
 ## Research credits
 

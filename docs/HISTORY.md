@@ -1,5 +1,14 @@
 # History
 
+## 2026-11-22: first boot to the Main Menu (Claude Code)
+
+- Copied psprecomp v0.6.0 (MIT) into third_party/psprecomp, removed its
+  decryption code, and extended recompiler and runtime (see its UPSTREAM.md).
+- Added the game build pipeline (tools/build_game.py, games/dbz/), disc
+  extraction, NID naming, screenshot and scripted-button test switches.
+- The recompiled game boots to title, New Game, save creation and the 3D Main
+  Menu on PC. Starting a stage hangs after loading overlay 4.
+
 ## 2026-11-22: Phase 1 task 2b, overlay loading rules (Claude Code)
 
 - Added original tools/mips_scan.py (MIPS subset scanner) and 6 synthetic tests.
