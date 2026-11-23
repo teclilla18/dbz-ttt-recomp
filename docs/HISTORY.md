@@ -1,5 +1,17 @@
 # History
 
+## 2026-11-22: PC continuation checkpoint for another Codex agent
+
+- With tracing OFF and separate fresh saves, advanced the first campaign stage
+  through story, mission start and the movement tutorial. Exploration then shows
+  HUD over a black field; 3D world/characters are not visible. Cause unproven.
+- Began a direct Free Battle route; selection loads overlay 5. Stopped the
+  automated run at the user's handoff request, before combat validation.
+- Read public PSPSDK matrix/weight documentation and noted the runtime's
+  weighted-vertex rejection as a hypothesis requiring trace evidence.
+- No implementation changed and no gameplay acceptance claimed. Source-only
+  checkpoint notes and local handoff updated; test processes stopped.
+
 ## 2026-11-22: OLED menu and combat controls requirement
 
 - User tried the PC build with an Xbox controller and requested continuation;

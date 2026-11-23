@@ -26,6 +26,15 @@
 
 ## Original survey
 
+PC rendering follow-up, 2026-11-22: reviewed
+[PSPSDK GU documentation](https://pspdev.github.io/pspsdk/group__GU.html)
+and [GE matrix definitions](https://github.com/pspdev/pspsdk/blob/master/src/ge/pspge.h)
+(BSD-style PSPSDK licence, already credited below and in README). Learned the
+public bone-matrix/weight-format interfaces: skinning accepts up to eight
+matrices/weights. Our runtime explicitly rejects weighted vertex formats;
+whether that explains the observed black exploration field still needs a GE
+trace. No PSPSDK source adopted and no renderer change made in this follow-up.
+
 Survey checked 2026-11-22. **Evaluate an existing PSP C toolchain before writing
 a new translator.** Released Zelda and Sonic ports establish the method, while
 an existing Tenkaichi Tag Team project directly supports investigating overlays.

@@ -79,3 +79,27 @@ at 8515/8518. These are virtual vblank counts, not measured rendering FPS.
 5. Compare the frames, loop address, entry totals and captures after stage start.
    Watchdog snapshots are best-effort diagnostics, not synchronized CPU dumps.
    Disable `DBZ_TRACE` for normal play; it also enables stack diagnostics.
+
+## Further PC check before handoff (2026-11-22)
+
+- [confirmed] The rebuilt normal PC Release (`DBZ_TRACE=OFF`) advances through
+  story, "Start Mission: Find Gohan" (capture 14400) and the movement tutorial
+  (16200). At 23100 the exploration HUD is visible over a black field, with no
+  visible world or character. This is not a successful gameplay validation.
+  Cause remains unproven. Original loading-loop fix still holds on this route.
+- Evidence: ignored `build/battle-play/route1/`, including `press.txt`, screenshots
+  and logs. Separate saves; original/default saves untouched. The 180-second
+  watchdog reached frame 21470. Run stopped deliberately after these captures.
+- Next probe: choose Free Battle directly to separate battle loading/rendering
+  from campaign exploration. Initial route in `build/battle-play/free1/press.txt`:
+  use the boot/name/save presses through 5100, then Down at 5500 and 5700,
+  Cross at 6000, and Cross every 600 frames from 6600 through 27000.
+  [confirmed] Main Menu selection and overlay 5 load; deliberately stopped for
+  handoff at the owner's request before combat. Last capture is frame 6000.
+- Runtime source currently rejects weighted vertex formats in `vertex_layout`
+  (`ge.c`). That is a plausible contributor to missing 3D, not a proven cause
+  in these scenes. Before implementing skinning, collect GE statistics and a
+  targeted `PSPRECOMP_TRACE_GE=<frame>` log to establish the actual draw formats.
+  `psp_ge_dump_stats()` exists but is not called by the current watchdog.
+- No renderer/input source changed during these checks. The next agent should
+  claim this investigation and show a narrow plan before implementation.

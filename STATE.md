@@ -18,6 +18,11 @@ the first stage's story introduction. Destination: native Switch OLED and Switch
   also used the wrong constant-selector field. Both corrected. Synthetic
   generated-C execution tests fail before the fixes and pass afterward.
 - Playable combat and completion of a battle remain unverified.
+- [confirmed] PC Release with tracing OFF advances further through campaign
+  story, "Find Gohan" mission start and movement tutorial. Exploration capture
+  shows HUD over a black field; world/characters are not visible. Cause unproven.
+- [confirmed] Choosing Free Battle loads overlay 5. The latest automated run
+  was deliberately stopped for handoff before combat was checked.
 - Not accepted by the user; nothing released. No Switch build yet.
 
 ## How it is built
@@ -57,8 +62,8 @@ the first stage's story introduction. Destination: native Switch OLED and Switch
 
 ## Next small tasks
 
-1. Continue the first stage's story introduction and reach a playable battle
-   on PC. The prior loading stall is resolved; see battle-load.md.
+1. Continue the Free Battle route to reach combat, and diagnose the campaign's
+   black exploration field. See battle-load.md for local evidence and scripts.
 2. Test a battle through completion; then sound output and music decoding.
 3. Switch: port the window/input/audio layer to libnx (devkitA64 is
    installed), build an NRO, test on the OLED.
