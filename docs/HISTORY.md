@@ -8,6 +8,8 @@
   extraction, NID naming, screenshot and scripted-button test switches.
 - The recompiled game boots to title, New Game, save creation and the 3D Main
   Menu on PC. Starting a stage hangs after loading overlay 4.
+- Added a watchdog dump and a ring of the last 64 firmware calls; handed the
+  hang investigation to Codex.
 
 ## 2026-11-22: Phase 1 task 2b, overlay loading rules (Claude Code)
 

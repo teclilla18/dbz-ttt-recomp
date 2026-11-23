@@ -128,6 +128,21 @@ void psp_hle_dump_recent(FILE *out) {
 static uint64_t g_unimpl_total;
 static uint64_t g_unimpl_logged;
 
+/* Ring of the most recent firmware calls (added for DBZ TTT bring-up). */
+static struct { const char *name; uint32_t nid, a0, a1, a2, v0, ra; } g_ring[64];
+static volatile unsigned g_ring_n;
+
+void psp_hle_dump_ring(FILE *out) {
+    unsigned n = g_ring_n, count = n < 64 ? n : 64;
+    fprintf(out, "  last %u firmware calls, oldest first:%c", count, 10);
+    for (unsigned j = n - count; j != n; j++) {
+        unsigned k = j & 63u;
+        fprintf(out, "    %-34s (0x%08X, 0x%08X, 0x%08X) -> 0x%08X  ra 0x%08X%c",
+                g_ring[k].name ? g_ring[k].name : "?", g_ring[k].a0, g_ring[k].a1,
+                g_ring[k].a2, g_ring[k].v0, g_ring[k].ra, 10);
+    }
+}
+
 void psp_hle_call(uint32_t nid) {
     if (nid == 0x237DBD4Fu)
         fprintf(stderr, "psp_hle_call ENTERED for 0x237DBD4F (%d entries registered)\n", g_count);
@@ -139,7 +154,14 @@ void psp_hle_call(uint32_t nid) {
             static long trace_left = -2;
             if (trace_left == -2) { const char *e = getenv("PSPRECOMP_TRACE_HLE"); trace_left = e ? atol(e) : -1; }
             uint32_t a0 = psp_cpu.r[PSP_REG_A0], a1 = psp_cpu.r[PSP_REG_A1], a2 = psp_cpu.r[PSP_REG_A2];
+            const uint32_t ra = psp_cpu.r[PSP_REG_RA];
             g_fn[i]();
+            {   /* last 64 calls, any result, for psp_hle_dump_ring() */
+                unsigned k = g_ring_n++ & 63u;
+                g_ring[k].name = g_entry[i].name; g_ring[k].nid = nid;
+                g_ring[k].a0 = a0; g_ring[k].a1 = a1; g_ring[k].a2 = a2;
+                g_ring[k].v0 = psp_cpu.r[PSP_REG_V0]; g_ring[k].ra = ra;
+            }
             if (trace_left > 0) {
                 trace_left--;
                 fprintf(stderr, "hle: %-36s (0x%08X, 0x%08X, 0x%08X) -> 0x%08X  ra 0x%08X\n",

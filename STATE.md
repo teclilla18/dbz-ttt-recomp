@@ -43,11 +43,14 @@ on PC through its menus. Destination: native Switch OLED and Switch 2.
 3. `tools/run_pc.ps1 -Seconds 60`. Keys: arrows, Z=Cross, X=Circle,
    A=Square, S=Triangle, Q/W=L/R, Enter=Start; Xbox pad works.
    Test switches: DBZ_SHOTS=<dir>, DBZ_PRESS="frame:button,...",
-   PSPRECOMP_TRACE_HLE=N, PSPRECOMP_TRACE_IO=1, DBZ_LOG_OVERLAYS=1.
+   PSPRECOMP_TRACE_HLE=N, PSPRECOMP_TRACE_IO=1, DBZ_LOG_OVERLAYS=1,
+   DBZ_DUMP_SEC=<s> (threads + last 64 firmware calls).
 
 ## Next small tasks
 
-1. Find the battle-load hang (trace the last firmware calls and threads).
+1. Find the battle-load hang. Watchdog (DBZ_DUMP_SEC) shows a thread looping on
+   sceKernelCpuSuspendIntr/ResumeIntr: likely waiting for an interrupt or GE
+   callback the runtime never delivers. Handed to Codex (local AI_HANDOFF.md).
 2. Reach a playable battle on PC; then sound output and music decoding.
 3. Switch: port the window/input/audio layer to libnx (devkitA64 is
    installed), build an NRO, test on the OLED.

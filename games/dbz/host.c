@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 void psp_recomp_register(void);   /* build/gen/main/dbz_register.c */
 void dbz_register_imports(void);  /* build/gen/main/dbz_imports.c (tools/build_game.py) */
@@ -44,6 +45,25 @@ static int load_extra_segments(const char *path) {
         free(buf);
     }
     fclose(f);
+    return 0;
+}
+
+/* DBZ_DUMP_SEC=<s>: a separate host thread prints thread states and recent
+ * firmware calls after that many seconds, even if a guest thread never yields. */
+#ifdef _WIN32
+#include <windows.h>
+static DWORD WINAPI watchdog(LPVOID arg) {
+    Sleep((DWORD)(intptr_t)arg * 1000u);
+#else
+#include <pthread.h>
+#include <unistd.h>
+static void *watchdog(void *arg) {
+    sleep((unsigned)(intptr_t)arg);
+#endif
+    fprintf(stderr, "[dbz] watchdog dump at frame %llu\n", (unsigned long long)psp_display_vblanks());
+    psp_threadman_dump(stderr);
+    psp_hle_dump_ring(stderr);
+    fflush(stderr);
     return 0;
 }
 
@@ -77,6 +97,15 @@ int main(int argc, char **argv) {
            m.base, m.entry, m.gp, m.nctors);
     fflush(stdout);
 
+    if (getenv("DBZ_DUMP_SEC")) {
+        intptr_t secs = atol(getenv("DBZ_DUMP_SEC"));
+#ifdef _WIN32
+        CreateThread(NULL, 0, watchdog, (LPVOID)secs, 0, NULL);
+#else
+        pthread_t t;
+        pthread_create(&t, NULL, watchdog, (void *)secs);
+#endif
+    }
     psp_module_start(&m);
     /* DBZ_SHOTS=<dir>: save the picture every 300 frames (about 5 s) for
      * unattended checks. Off by default. */
@@ -105,8 +134,19 @@ int main(int argc, char **argv) {
         }
     }
     uint64_t next_shot = 300;
+    /* DBZ_DUMP_AT=<frame>: report thread states and recent firmware calls
+     * once the game reaches that frame. */
+    const uint64_t dump_at = getenv("DBZ_DUMP_AT") ? strtoull(getenv("DBZ_DUMP_AT"), NULL, 10) : 0;
+    int dumped = 0;
     while (!psp_window_closed()) {
         psp_threadman_yield();
+        if (!dumped && dump_at && psp_display_vblanks() >= dump_at) {
+            dumped = 1;
+            fprintf(stderr, "[dbz] dump at frame %llu\n", (unsigned long long)psp_display_vblanks());
+            psp_threadman_dump(stderr);
+            psp_hle_dump_ring(stderr);
+            fflush(stderr);
+        }
         if (npress) {
             uint64_t v = psp_display_vblanks();
             uint32_t b = 0;
