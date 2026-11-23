@@ -87,6 +87,10 @@ Phase 2 then handles PC boot, firmware calls, graphics, sound and controls.
 
 ## Phase 3: Switch, then Switch 2
 
+- Owner's OLED controls requirement: natural A-confirm/B-cancel in menus;
+  Xbox button positions during combat in all modes. Switch automatically
+  with the game context, including pause/results menus. See [controls.md](controls.md).
+
 - Reuse the Riders/Heroes Switch platform layer (deko3d renderer approach, input, audio, file paths, the setup tool
   that builds on the player's PC). Switch 2 native after Switch 1 runs well.
 - 480x272 original resolution: higher internal resolution as an option.

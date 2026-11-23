@@ -1,5 +1,15 @@
 # History
 
+## 2026-11-22: OLED menu and combat controls requirement
+
+- User tried the PC build with an Xbox controller and requested continuation;
+  no full battle acceptance was reported.
+- Recorded the requested OLED behaviour: menus use Switch A-confirm/B-cancel;
+  fighting in all modes uses Xbox positions (B=Cross, A=Circle, Y=Square,
+  X=Triangle). Pause/results return to menu handling.
+- Requirements documented in docs/notes/controls.md and the Switch plan.
+  No input code changed; Switch implementation and hardware tests remain pending.
+
 ## 2026-11-22: first-stage loading stall corrected (Codex)
 
 - Reproduced the stall with a separate fresh save root. Timed entry/back-edge

@@ -62,6 +62,9 @@ the first stage's story introduction. Destination: native Switch OLED and Switch
 2. Test a battle through completion; then sound output and music decoding.
 3. Switch: port the window/input/audio layer to libnx (devkitA64 is
    installed), build an NRO, test on the OLED.
+   Required controls: menus use Switch A-confirm/B-cancel; combat in every
+   mode uses Xbox positions (B=Cross, A=Circle, Y=Square, X=Triangle).
+   This is recorded only; see controls.md for context/transition checks.
 
 ## Where to read
 
@@ -69,3 +72,4 @@ the first stage's story introduction. Destination: native Switch OLED and Switch
   [Metadata](docs/notes/metadata.md), [Research](docs/notes/research.md),
   [Recon](docs/notes/recon.md), [Imports](docs/notes/imports.md)
 - [Stage loading diagnosis and reproduction](docs/notes/battle-load.md)
+- [OLED menu and battle controls requirement](docs/notes/controls.md)
