@@ -493,6 +493,9 @@ static void emit_simple(ectx *c, const a_insn *in, const char *ind) {
         break;
     }
 
+    case A_VSOCP:
+        fprintf(f, "%spsp_vsocp(%u, %u, %u);\n", ind, in->vd, in->vs, in->vsize);
+        return;
     /* vcmovt/vcmovf: bit 19 picks f (1) or t (0), bits 18..16 the CC test. */
     case A_VCMOV:
         fprintf(f, "%spsp_vcmov(%u, %u, %u, %u, %u);\n", ind, in->vd, in->vs, in->vsize,

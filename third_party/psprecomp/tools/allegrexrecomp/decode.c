@@ -222,6 +222,7 @@ static const a_opinfo OPINFO[A_OP_COUNT] = {
     [A_VNSIN]    = { "vnsin",    F_VD_VS },
     [A_VREXP2]   = { "vrexp2",   F_VD_VS },
     [A_VCST]     = { "vcst",     F_VD_VS },
+    [A_VSOCP]    = { "vsocp",    F_VD_VS },
     [A_VF2IN]    = { "vf2in",    F_VD_VS },
     [A_VF2IZ]    = { "vf2iz",    F_VD_VS },
     [A_VF2IU]    = { "vf2iu",    F_VD_VS },
@@ -680,6 +681,7 @@ int a_decode(uint32_t word, uint32_t addr, a_insn *out) {
         case 0x02:                                  /* VFPU9 */
             switch (RT_F(word)) {
             case 0x04: op = A_VOCP; break;
+            case 0x05: op = A_VSOCP; break;
             case 0x0A: op = A_VSGN; break;
             default:   op = A_VFPU_UNKNOWN; break;
             }

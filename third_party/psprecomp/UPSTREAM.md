@@ -23,6 +23,9 @@ Recompiler (`tools/allegrexrecomp`):
   including likely-slot nullification and condition changes in delay slots.
 - New ops: `vcmovt/vcmovf`, VFPU random (`vrnds/vrndi/vrndf1/vrndf2`),
   `floor.w.s`, `ceil.w.s`, `round.w.s`.
+- `vsocp.s/.p` decode/emission and original runtime complement-pair expansion.
+  Inputs are snapshotted for overlapping outputs; unmodelled prefixes/wider
+  forms trap. Original generated-C execution tests cover 330 value/layout cases.
 
 Runtime (`src/`):
 - GE relative addressing: ORIGIN/OFFSET_ADDR supply an additive offset separate

@@ -104,6 +104,9 @@ enum {
     PSP_VU_OCP, PSP_VU_SGN                    /* 1 - x, sign(x) */
 };
 void psp_vunary(int op, uint32_t vd, uint32_t vs, int size);
+/* Saturated complement pairs, scalar -> pair or pair -> quad. Prefix variants
+ * and wider input forms are not modelled and report a VFPU trap. */
+void psp_vsocp(uint32_t vd, uint32_t vs, int size);
 void psp_vcmov(uint32_t vd, uint32_t vs, int size, int tf, int imm3);
 /* kind: 0 vrnds (seed from vs), 1 vrndi, 2 vrndf1, 3 vrndf2 */
 void psp_vrnd(int kind, uint32_t vreg, int size);

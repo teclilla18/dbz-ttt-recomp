@@ -60,6 +60,23 @@ target_link_libraries(test_emitted_vfpu_branches PRIVATE psprecomp)
 add_test(NAME emitted_vfpu_branches COMMAND test_emitted_vfpu_branches)
 set_tests_properties(emitted_vcst emitted_vfpu_branches PROPERTIES TIMEOUT 10)
 
+add_executable(gen_vsocp gen_vsocp.c)
+target_link_libraries(gen_vsocp PRIVATE allegrex_core)
+set(vsocp_dir "${CMAKE_CURRENT_BINARY_DIR}/vsocp")
+file(MAKE_DIRECTORY "${vsocp_dir}")
+add_custom_command(
+    OUTPUT "${vsocp_dir}/t_vsocp_funcs_000.c" "${vsocp_dir}/t_vsocp_register.c"
+           "${vsocp_dir}/t_vsocp_funcs.h" "${vsocp_dir}/t_vsocp_imports.c"
+    COMMAND gen_vsocp "${vsocp_dir}"
+    DEPENDS gen_vsocp
+    VERBATIM)
+add_executable(test_emitted_vsocp test_emitted_vsocp.c
+    "${vsocp_dir}/t_vsocp_funcs_000.c" "${vsocp_dir}/t_vsocp_register.c"
+    "${vsocp_dir}/t_vsocp_imports.c")
+target_link_libraries(test_emitted_vsocp PRIVATE psprecomp)
+add_test(NAME emitted_vsocp COMMAND test_emitted_vsocp)
+set_tests_properties(emitted_vsocp PROPERTIES TIMEOUT 10)
+
 add_executable(test_hle test_hle.c)
 target_link_libraries(test_hle PRIVATE psprecomp allegrex_core)
 add_test(NAME hle COMMAND test_hle)

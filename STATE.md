@@ -22,6 +22,11 @@ the first stage's story introduction. Destination: native Switch OLED and Switch
   Later frames still black out and fighters are not verified visible. A traced
   world matrix contains NaNs; `vsocp` at `0x0880F3E8` remains unsupported.
   This is simulation progression, not playable/stable battle validation.
+- [confirmed] `vsocp` implemented (scalar->pair, pair->quad). Re-run of the
+  same Free Battle route: 0 draws with non-finite matrices (was NaN), 0 invalid
+  screen coordinates of 21886, arena drawn through combat frames 12000-15900,
+  timer and health bars change. Fighters still not visible; unknown VFPU words
+  at 0x089BB9D0.. still trap ("vfpu?"). Toolkit tests 29/29, Python 17/17.
 - [confirmed] PC Release with tracing OFF advances further through campaign
   story, "Find Gohan" mission start and movement tutorial. Exploration capture
   shows HUD over a black field; world/characters are not visible. Cause unproven.
@@ -66,8 +71,8 @@ the first stage's story introduction. Destination: native Switch OLED and Switch
 
 ## Next small tasks
 
-1. Diagnose invalid world transforms / unsupported `vsocp` in combat. Relative
-   GE addresses and cached-alias stop points now have synthetic regression tests.
+1. Decode/implement the unknown VFPU words at 0x089BB9D0.. and find why
+   fighters are not drawn in combat.
 2. Test a battle through completion; then sound output and music decoding.
 3. Switch: port the window/input/audio layer to libnx (devkitA64 is
    installed), build an NRO, test on the OLED.

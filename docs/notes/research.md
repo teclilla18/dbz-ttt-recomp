@@ -28,6 +28,24 @@
   vertex/index addresses, additive carries, jumps and nested calls across a
   stall, using fixed expected pixel locations.
 
+## Reachable vsocp follow-up (2026-11-22)
+
+- [VFPU instruction documentation](https://davidgfnet.github.io/psp-vfpu-docs/#vsocp.s)
+  (GPL-3.0) defines the scalar-to-pair and pair-to-quad saturated complementary
+  outputs. [PPSSPP instruction table](https://github.com/hrydgard/ppsspp/blob/master/Core/MIPS/MIPSTables.cpp)
+  and [VFPU interpreter](https://github.com/hrydgard/ppsspp/blob/master/Core/MIPS/InterpreterVFPU.cpp)
+  (GPL-2.0-or-later) corroborate encoding, output width and NaN-preserving
+  saturation. Learned behaviour facts only; copied no code/pseudocode/tests.
+- Original implementation supports unprefixed scalar/pair input forms, snapshots
+  inputs before overlapping writes and preserves NaN rather than silently
+  converting it to a finite value. Unmodelled prefix combinations and wider
+  forms explicitly report VFPU traps. No claim of bit-exact NaN payloads or
+  independent hardware validation for this new instruction.
+- Original synthetic encodings are translated, compiled and executed in 330
+  cases with independently tabulated expected values, scalar/pair widths,
+  overlapping/transposed destinations, finite/special inputs, and untouched
+  lanes. Additional checks preserve loud failure for unsupported variants.
+
 ## PC stage-load investigation (2026-11-22)
 
 - Rechecked [psprecomp's threading contract](https://github.com/sp00nznet/psprecomp/blob/main/docs/THREADING.md)

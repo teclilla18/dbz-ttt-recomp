@@ -485,6 +485,30 @@ void psp_vrot(uint32_t vd, uint32_t vs, uint32_t imm, int size) {
     end_op();
 }
 
+/* Each input expands to a complementary pair in [0,1]. Read both inputs
+ * before writing any result: the wider output can overlap the source. The
+ * clamp comparisons preserve NaN while making saturated zero positive. */
+void psp_vsocp(uint32_t vd, uint32_t vs, int size) {
+    if (!take_prefixes(psp_cpu.pc, "vsocp prefixes")) return;
+    if (size != 1 && size != 2) {
+        psp_vfpu_unimplemented(psp_cpu.pc, "vsocp width");
+        return;
+    }
+    int src[4], dst[4];
+    float input[2];
+    psp_vfpu_regs(vs, size, src);
+    psp_vfpu_regs(vd, size * 2, dst);
+    for (int i = 0; i < size; i++) input[i] = psp_cpu.v[src[i]];
+    for (int j = 0; j < size * 2; j++) {
+        float value = input[j / 2];
+        if (!(j & 1)) value = 1.0f - value;
+        if (value <= 0) value = 0;
+        else if (value >= 1) value = 1;
+        psp_cpu.v[dst[j]] = value;
+    }
+    end_op();
+}
+
 /* ---- matrix ops without a multiply --------------------------------------- */
 
 /* A matrix register names `size` consecutive columns, each a vector of `size`
